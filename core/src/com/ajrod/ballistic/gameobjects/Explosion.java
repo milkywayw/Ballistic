@@ -13,6 +13,7 @@ public class Explosion extends TexturedBox {
     static {
         missileFrames = new TextureRegion[5];
         TextureRegion[][] tmp = Ballistic.res.getAtlas("pack").findRegion("explosion").split(25, 25);
+        System.arraycopy(tmp[0], 0, missileFrames, 0, missileFrames.length);
 
         ani = new Animation(0.05f, missileFrames);
     }
@@ -24,9 +25,6 @@ public class Explosion extends TexturedBox {
 
         stateTime = 0f;
         timer = 1;
-    }
-
-    private static void initRegion() {
     }
 
     public void update(float dt) {
