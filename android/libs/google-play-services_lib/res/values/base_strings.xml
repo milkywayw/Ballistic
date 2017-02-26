@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
 
     <!-- Sign-in button text [CHAR LIMIT=15] -->
     <string name="common_signin_button_text">Sign in</string>

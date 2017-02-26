@@ -53,7 +53,7 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.squareup.okhttp:okhttp:2.5.0"
         compile "com.squareup.okio:okio:1.6.0"
-		compile "org.json:json:20140107"
+        compile "org.json:json:20140107"
     }
 }
 
