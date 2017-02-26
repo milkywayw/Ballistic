@@ -1,21 +1,11 @@
 package com.ajrod.ballistic.gameobjects;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class Graphic extends Box {
+public class Graphic extends TexturedBox {
 
-    private TextureRegion image;
-
+    // TODO: this class can probably be removed, but will consult first. It's basically just a TexturedBox
     public Graphic(TextureRegion image, float x, float y) {
-        this.image = image;
-        this.x = x;
-        this.y = y;
-        width = image.getRegionWidth() + 200;
-        height = image.getRegionHeight() + 200;
-    }
-
-    public void render(SpriteBatch sb) {
-        sb.draw(image, x - width / 2, y - height / 2, width, height);
+        super(image, x, y, image.getRegionWidth() + 200, image.getRegionHeight() + 200);
     }
 }

@@ -1,8 +1,8 @@
 package com.ajrod.ballistic.states;
 
 import com.ajrod.ballistic.Ballistic;
-import com.ajrod.ballistic.gameobjects.Button;
 import com.ajrod.ballistic.gameobjects.Modal;
+import com.ajrod.ballistic.gameobjects.TexturedBox;
 import com.ajrod.ballistic.handlers.FriendInput;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class LeaderboardState extends State {
 
     private TextureRegion bg;
-    private Button friends, global, menu, addFriend;
+    private TexturedBox friends, global, menu, addFriend;
     private FriendInput fInput;
     private boolean isGlobal, modalActive;
     private Modal modal;
@@ -28,7 +28,6 @@ public class LeaderboardState extends State {
 
         top20Names = new ArrayList<String>(tn);
         top20Scores = new ArrayList<String>(ts);
-        ;
 
         friendsList = new Friends[fs.size() + 1];
         for (int i = 0; i < friendsList.length - 1; i++)
@@ -37,13 +36,13 @@ public class LeaderboardState extends State {
 
         Arrays.sort(friendsList);
 
-        menu = new Button(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
+        menu = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
                 82.5f, 45, 150, 75);
-        addFriend = new Button(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
+        addFriend = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
                 397.5f, Ballistic.HEIGHT - 120, 150, 75);
-        global = new Button(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
+        global = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
                 82.5f, Ballistic.HEIGHT - 120, 150, 75);
-        friends = new Button(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
+        friends = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
                 240, Ballistic.HEIGHT - 120, 150, 75);
         Texture tex = new Texture(Gdx.files.internal("bg1.png"));
         bg = new TextureRegion(tex);

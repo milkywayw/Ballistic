@@ -104,7 +104,7 @@ public class LevelFourState extends LevelState {
                     }
                 }
                 /*if (score >= 5000) //if (score >= 10) // testing purposes
-				{
+                {
 					done = true;
 					for (int i = 0; i < 2; i++) {
 						fMissile[i].kill();
@@ -140,7 +140,7 @@ public class LevelFourState extends LevelState {
             float fade = timer;
             if (timer > 1f) fade = 1;
             sb.setColor(1, 1, 1, 1);
-            sb.draw(crack, deathX - (float) deathRad / 2, deathY - (float) deathRad / 2, (float) deathRad, (float) deathRad);
+            sb.draw(crack, deathX - deathRad / 2, deathY - deathRad / 2, deathRad, deathRad);
             sb.setColor(1, 1, 1, fade);
         } else {
             renderAndHandleInputPaused(sb);

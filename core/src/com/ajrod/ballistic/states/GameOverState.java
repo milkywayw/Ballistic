@@ -1,13 +1,15 @@
 package com.ajrod.ballistic.states;
 
 import com.ajrod.ballistic.Ballistic;
-import com.ajrod.ballistic.gameobjects.Button;
+import com.ajrod.ballistic.gameobjects.TexturedBox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.Locale;
+
 public class GameOverState extends State {
 
-    private Button play, menu;
+    private TexturedBox play, menu;
     private boolean flag, newHighScore;
     private int score;
 
@@ -22,9 +24,9 @@ public class GameOverState extends State {
             Ballistic.prefs.flush();
         }
 
-        play = new Button(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
+        play = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
                 Ballistic.WIDTH / 2, Ballistic.HEIGHT / 2 - 150, 153, 78);
-        menu = new Button(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
+        menu = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
                 Ballistic.WIDTH / 2, Ballistic.HEIGHT / 2 - 250, 153, 78);
         flag = true;
 
@@ -52,8 +54,8 @@ public class GameOverState extends State {
         if (newHighScore) {
             Ballistic.font.draw(sb, "New High Score: " + score, 65, Ballistic.HEIGHT / 2 - 10);
         } else {
-            Ballistic.font.draw(sb, String.format("        Score: %d", score), 50, Ballistic.HEIGHT / 2 + 5);
-            Ballistic.font.draw(sb, String.format("High Score: %d", Ballistic.highScore), 50, Ballistic.HEIGHT / 2 - 35);
+            Ballistic.font.draw(sb, String.format(Locale.US, "        Score: %d", score), 50, Ballistic.HEIGHT / 2 + 5);
+            Ballistic.font.draw(sb, String.format(Locale.US, "High Score: %d", Ballistic.highScore), 50, Ballistic.HEIGHT / 2 - 35);
         }
 
         play.render(sb);

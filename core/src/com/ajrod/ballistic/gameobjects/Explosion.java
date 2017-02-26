@@ -5,26 +5,28 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class Explosion extends Box {
+public class Explosion extends TexturedBox {
 
-    private Animation ani;
-    private TextureRegion[] missileFrames;
-    private TextureRegion currentFrame;
-    private float stateTime;
-    private float timer;
+    private static Animation ani;
+    private static TextureRegion[] missileFrames;
 
-    public Explosion(float x, float y) {
-        timer = 1;
-        this.x = x;
-        this.y = y;
-        width = 0;
-        height = 0;
-
+    static {
         missileFrames = new TextureRegion[5];
         TextureRegion[][] tmp = Ballistic.res.getAtlas("pack").findRegion("explosion").split(25, 25);
-        for (int i = 0; i < 5; i++) missileFrames[i] = tmp[0][i];
+
         ani = new Animation(0.05f, missileFrames);
+    }
+
+    private float stateTime, timer;
+
+    public Explosion(float x, float y) {
+        super(missileFrames[0], x, y, 0, 0);
+
         stateTime = 0f;
+        timer = 1;
+    }
+
+    private static void initRegion() {
     }
 
     public void update(float dt) {
@@ -35,11 +37,13 @@ public class Explosion extends Box {
         if (timer <= 0) reset();
     }
 
+    @Override
     public void render(SpriteBatch sb) {
-        if (width != 0) {
-            currentFrame = ani.getKeyFrame(stateTime);
-            sb.draw(currentFrame, x - width / 2, y - height / 2, width, height);
-        }
+        if (width == 0)
+            return;
+
+        currentTexture = ani.getKeyFrame(stateTime);
+        super.render(sb);
     }
 
     public void setWH(float radius) {

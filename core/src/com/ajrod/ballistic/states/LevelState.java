@@ -1,7 +1,7 @@
 package com.ajrod.ballistic.states;
 
 import com.ajrod.ballistic.Ballistic;
-import com.ajrod.ballistic.gameobjects.Button;
+import com.ajrod.ballistic.gameobjects.TexturedBox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,15 +21,16 @@ public abstract class LevelState extends State {
     protected TextureRegion crack;
     protected int pauses;
     protected Running running;
-    protected Button pause;
-    private Button resume;
+    protected TexturedBox pause;
+    private TexturedBox resume;
+
     protected LevelState(GSM gsm) {
         super(gsm);
         pauses = 3;
         running = Running.RESUMED;
-        resume = new Button(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
+        resume = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
                 Ballistic.WIDTH / 2, Ballistic.HEIGHT / 2 - 50, 153, 78);
-        pause = new Button(Ballistic.res.getAtlas("pack").findRegion("menubuttons"), 50, 25, 100, 50);
+        pause = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("menubuttons"), 50, 25, 100, 50);
     }
 
     public abstract void update(float dt);

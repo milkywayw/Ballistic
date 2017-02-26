@@ -2,17 +2,34 @@ package com.ajrod.ballistic.gameobjects;
 
 import com.ajrod.ballistic.Ballistic;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+
 public class SecondBoss extends Box {
 
+    private static Animation ani;
+    private static TextureRegion health, healthBar, barEnd;
+
+    static {
+        healthBar = Ballistic.res.getAtlas("pack").findRegion("HealthBar");
+        barEnd = Ballistic.res.getAtlas("pack").findRegion("HealthEnd");
+        health = Ballistic.res.getAtlas("pack").findRegion("Health");
+
+        TextureRegion[] missileFrames = new TextureRegion[12];
+        TextureRegion[][] tmp = Ballistic.res.getAtlas("pack").findRegion("sharkMissile_v2").split(75, 50);
+
+        int k = 0;
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 3; j++)
+                missileFrames[k++] = tmp[i][j];
+
+        ani = new Animation(0.1f, missileFrames);
+        ani.setPlayMode(PlayMode.LOOP_PINGPONG);
+    }
+
     private SecondBossP2 p2;
-    private Animation ani;
-    private TextureRegion health;
-    private TextureRegion[] missileFrames;
-    private TextureRegion currentFrame, healthBar, barEnd;
     private int hp;
     private boolean defeated, goingRight, invincible, toggle;
     private float stateTime;
@@ -22,38 +39,23 @@ public class SecondBoss extends Box {
     private float closeness;
 
     public SecondBoss() {
-        p2 = new SecondBossP2(hp);
+        super(-50, Ballistic.HEIGHT - 100, 150, 100);
+
         defeated = false;
-        hit = false;
         invincible = false;
-        closeness = 19;
-        x = -50;
-        y = Ballistic.HEIGHT - 100;
-        explosion = new Explosion(x, y);
         goingRight = true;
         goingDown = true;
         toggle = true;
+        hit = false;
+
+        closeness = 19;
         cycles = 1;
         hp = 100;
-        //hp = 5; // testing purposes
-        width = 150;
-        height = 100;
 
-        healthBar = Ballistic.res.getAtlas("pack").findRegion("HealthBar");
-        barEnd = Ballistic.res.getAtlas("pack").findRegion("HealthEnd");
-        health = Ballistic.res.getAtlas("pack").findRegion("Health");
+        explosion = new Explosion(x, y);
 
-        missileFrames = new TextureRegion[12];
-        TextureRegion[][] tmp = Ballistic.res.getAtlas("pack").findRegion("sharkMissile_v2").split(75, 50);
-        int k = 0;
-        for (int i = 0; i < 4; i++)
-            for (int j = 0; j < 3; j++) {
-                missileFrames[k] = tmp[i][j];
-                k++;
-            }
+        p2 = new SecondBossP2(hp);
 
-        ani = new Animation(0.1f, missileFrames);
-        ani.setPlayMode(PlayMode.LOOP_PINGPONG);
         stateTime = 0f;
     }
 
@@ -77,7 +79,7 @@ public class SecondBoss extends Box {
         }
     }
 
-    public void update(float dt, float increase) {
+    public void update(float dt) {
         explosion.update(dt);
         stateTime += dt;
         if (stateTime > 0.29f) stateTime = 0;
@@ -132,30 +134,33 @@ public class SecondBoss extends Box {
         }
     }
 
+    @Override
     public void render(SpriteBatch sb) {
-        if (cycles == 3) p2.render(sb);
-        else {
-            explosion.render(sb);
-            if (!hit) {
-                if (goingRight) currentFrame = ani.getKeyFrame(stateTime, true);
-                else currentFrame = ani.getKeyFrame(stateTime + 0.6f, true);
-            } else {
-                if (goingRight) {
-                    currentFrame = ani.getKeyFrame(stateTime + 0.3f, true);
-                    hit = false;
-                } else {
-                    currentFrame = ani.getKeyFrame(stateTime + 0.9f, true);
-                    hit = false;
-                }
-            }
-            sb.draw(currentFrame, x - width / 2, y - height / 2, width, height);
-
-            if (hp > 0) {
-                sb.draw(healthBar, 32, Ballistic.HEIGHT - 29, 416, 20);
-                sb.draw(barEnd, 40 + hp * 4, Ballistic.HEIGHT - 25, 4, 12);
-                sb.draw(health, 40, Ballistic.HEIGHT - 25, hp * 4, 12);
-            }
+        if (cycles == 3) {
+            p2.render(sb);
+            return;
         }
+
+        explosion.render(sb);
+        renderSelf(sb);
+
+        if (hp > 0) {
+            sb.draw(healthBar, 32, Ballistic.HEIGHT - 29, 416, 20);
+            sb.draw(barEnd, 40 + hp * 4, Ballistic.HEIGHT - 25, 4, 12);
+            sb.draw(health, 40, Ballistic.HEIGHT - 25, hp * 4, 12);
+        }
+    }
+
+    private void renderSelf(SpriteBatch sb) {
+        float shift = goingRight ? 0f : 0.6f;
+
+        if(hit) {
+            shift += 0.3f;
+            hit = false;
+        }
+
+        texture = ani.getKeyFrame(stateTime + shift, true);
+        super.render(sb);
     }
 
     public void reset() {
@@ -181,11 +186,10 @@ public class SecondBoss extends Box {
 
     @Override
     public boolean contains(float x, float y) {
-        if (cycles == 3) return p2.contains(x, y);
-        return x > this.x - width / 2 &&
-                x < this.x + width / 2 &&
-                y > this.y - height / 2 &&
-                y < this.y + height / 2;
+        if (cycles == 3)
+            return p2.contains(x, y);
+        else
+            return this.contains(x, y);
     }
 
     public float getCloseness() {

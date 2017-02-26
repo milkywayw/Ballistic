@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.Locale;
+
 public class BossTwoState extends LevelState {
 
     private BasicMissile[] missile = new BasicMissile[3];
@@ -46,7 +48,7 @@ public class BossTwoState extends LevelState {
         exSheet = new Texture(Gdx.files.internal("final_explosion.png"));
         crack = Ballistic.res.getAtlas("pack").findRegion("cracked_glass");
         TextureRegion[][] tmp = TextureRegion.split(exSheet, 100, exSheet.getHeight());
-        for (int i = 0; i < 10; i++) exFrames[i] = tmp[0][i];
+        System.arraycopy(tmp[0], 0, exFrames, 0, exFrames.length);
         frames = 0;
 
         deathTimer = 54.0f;
@@ -74,7 +76,7 @@ public class BossTwoState extends LevelState {
                 gameOver(dt);
             else if (!done) {
                 deathTimer -= dt;
-                boss.update(dt, 10);
+                boss.update(dt);
                 if (boss.killedU())
                     setDeathParams(boss.getX(), boss.getY(), 340 * 6);
                 if (timer < 16f) {
@@ -140,7 +142,7 @@ public class BossTwoState extends LevelState {
             float fade = timer;
             if (timer > 1f) fade = 1;
             sb.setColor(1, 1, 1, 1);
-            sb.draw(crack, deathX - (float) deathRad / 2, deathY - (float) deathRad / 2, (float) deathRad, (float) deathRad);
+            sb.draw(crack, deathX - deathRad / 2, deathY - deathRad / 2, deathRad, deathRad);
             sb.setColor(1, 1, 1, fade);
         } else {
             renderAndHandleInputPaused(sb);
@@ -217,7 +219,7 @@ public class BossTwoState extends LevelState {
     }
 
     protected void endPhase(float dt) {
-        boss.update(dt, 0);
+        boss.update(dt);
         for (int i = 0; i < 3; i++) {
             sequence[i].update(dt);
             missile[i].update(dt, 0);
@@ -260,7 +262,7 @@ public class BossTwoState extends LevelState {
     }
 
     protected void gameOver(float dt) {
-        boss.update(dt, 0);
+        boss.update(dt);
         for (int i = 0; i < 3; i++) {
             missile[i].update(dt, 0);
             sMissile[i].update(dt, 0);
@@ -287,7 +289,7 @@ public class BossTwoState extends LevelState {
     protected void drawUI(SpriteBatch sb) {
         if (running == Running.RESUMED) {
             pause.render(sb);
-            if (!done) Ballistic.font.draw(sb, String.format("%.2f", deathTimer), 190, 760);
+            if (!done) Ballistic.font.draw(sb, String.format(Locale.US, "%.2f", deathTimer), 190, 760);
             Ballistic.font.draw(sb, "" + score, Ballistic.WIDTH - 75, 32);
             Ballistic.font.getData().setScale(0.7f, 0.7f);
             if (pauses == 0)

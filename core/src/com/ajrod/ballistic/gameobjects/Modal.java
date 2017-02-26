@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Modal {
 
     private TextureRegion box;
-    private Button ok;
+    private TexturedBox ok;
     private String title, body;
     private SpriteBatch batch = null;
     private int multiplier;
@@ -18,7 +18,7 @@ public class Modal {
         multiplier = message.length() * 5;
 
         box = Ballistic.res.getAtlas("pack").findRegion("modal");
-        ok = new Button(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
+        ok = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
                 240, Ballistic.HEIGHT / 2 - 62, 100, 50);
 
         if (error)

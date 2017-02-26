@@ -1,9 +1,9 @@
 package com.ajrod.ballistic.states;
 
 import com.ajrod.ballistic.Ballistic;
-import com.ajrod.ballistic.gameobjects.Button;
 import com.ajrod.ballistic.gameobjects.LoadingMissile;
 import com.ajrod.ballistic.gameobjects.Modal;
+import com.ajrod.ballistic.gameobjects.TexturedBox;
 import com.ajrod.ballistic.handlers.Server;
 import com.ajrod.ballistic.handlers.UsernameInput;
 import com.badlogic.gdx.Gdx;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class LoadingState extends State {
 
-    private Button loading;
+    private TexturedBox loading;
     private LoadingMissile missile;
     private TextureRegion bg;
     private UsernameInput box;
@@ -28,6 +28,7 @@ public class LoadingState extends State {
     private ArrayList<String> fn, tn, ts;
     private ArrayList<Number> fs;
     private String[] err;
+
     public LoadingState(GSM gsm) {
         super(gsm);
 
@@ -42,7 +43,7 @@ public class LoadingState extends State {
         modalActive = false;
 
         box = new UsernameInput();
-        loading = new Button(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
+        loading = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
                 Ballistic.WIDTH / 2, Ballistic.HEIGHT / 2, 153, 78);
         missile = new LoadingMissile();
         Texture tex = new Texture(Gdx.files.internal("bg1.png"));
@@ -145,10 +146,7 @@ public class LoadingState extends State {
             try {
                 JSONObject res = new JSONObject(server.updateScore(username, score).body().string());
                 error[0] = res.getString("err");
-                if (error[0].equals("none")) {
-                    success[0] = true;
-                } else
-                    success[0] = false;
+                success[0] = error[0].equals("none");
             } catch (JSONException e) {
                 error[0] = e.toString();
                 success[0] = false;

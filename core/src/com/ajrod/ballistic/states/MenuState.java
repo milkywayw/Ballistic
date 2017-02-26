@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class MenuState extends State {
 
-    boolean startGame;
+    private boolean startGame;
     private Graphic title;
-    private Button play, leader;
+    private TexturedBox play, leader;
     private SoundButton sound;
     private TextureRegion bg;
     private BasicMissile m1;
@@ -26,9 +26,9 @@ public class MenuState extends State {
         Ballistic.onMenu = true;
         title = new Graphic(Ballistic.res.getAtlas("pack").findRegion("ballistic_icon"),
                 Ballistic.WIDTH / 2, Ballistic.HEIGHT / 2 + 100);
-        play = new Button(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
+        play = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("menubuttons"),
                 Ballistic.WIDTH / 2, Ballistic.HEIGHT / 2 - 150, 153, 78);
-        leader = new Button(Ballistic.res.getAtlas("pack").findRegion("leaderboards_button"),
+        leader = new TexturedBox(Ballistic.res.getAtlas("pack").findRegion("leaderboards_button"),
                 Ballistic.WIDTH / 2, Ballistic.HEIGHT / 2 - 250, 153, 78);
         sound = new SoundButton(Ballistic.WIDTH - 25, 25, 50, 50, Ballistic.soundOn);
         Texture tex = new Texture(Gdx.files.internal("bg1.png"));
@@ -90,8 +90,7 @@ public class MenuState extends State {
             mouse.y = Gdx.input.getY();
             cam.unproject(mouse);
             if (sound.contains(mouse.x, mouse.y)) {
-                if (Ballistic.soundOn) Ballistic.soundOn = false;
-                else Ballistic.soundOn = true;
+                Ballistic.soundOn = ! Ballistic.soundOn;
                 sound.setState(Ballistic.soundOn);
             }
             if (play.contains(mouse.x, mouse.y)) {
